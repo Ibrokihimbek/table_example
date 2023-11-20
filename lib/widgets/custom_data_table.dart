@@ -26,39 +26,44 @@ class CustomDataTable extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SingleChildScrollView(
-          child: DataTable(
-            dataRowHeight: 50,
-            headingTextStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            columnSpacing: spaceBetweenColumns,
-            dataTextStyle: dataTextStyle,
-            headingRowColor: color,
-            border: TableBorder.lerp(
-              const TableBorder(
-                top: BorderSide.none,
-                right: BorderSide.none,
-                bottom: BorderSide.none,
-                left: BorderSide.none,
-                horizontalInside: BorderSide.none,
-                verticalInside: BorderSide.none,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: DataTable(
+              dataRowHeight: 50,
+
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-              const TableBorder(
-                top: BorderSide.none,
-                right: BorderSide.none,
-                bottom: BorderSide.none,
-                left: BorderSide.none,
-                horizontalInside: BorderSide(
-                  color: Colors.white,
-                  width: 1,
+              columnSpacing: spaceBetweenColumns,
+              dataTextStyle: dataTextStyle,
+              headingRowColor: color,
+              border: TableBorder.lerp(
+                const TableBorder(
+                  top: BorderSide.none,
+                  right: BorderSide.none,
+                  bottom: BorderSide.none,
+                  left: BorderSide.none,
+                  horizontalInside: BorderSide.none,
+                  verticalInside: BorderSide.none,
                 ),
-                verticalInside: BorderSide.none,
+                const TableBorder(
+                  top: BorderSide.none,
+                  right: BorderSide.none,
+                  bottom: BorderSide.none,
+                  left: BorderSide.none,
+                  horizontalInside: BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                  verticalInside: BorderSide.none,
+
+                ),
+                1,
               ),
-              1,
+              columns: columns,
+              rows: rows,
             ),
-            columns: columns,
-            rows: rows,
           ),
         ),
       ),

@@ -9,13 +9,15 @@ class TableExamplePage extends StatefulWidget {
 }
 
 class _TableExamplePageState extends State<TableExamplePage> {
-  int currentIdex = -1;
+  int currentIdex = 0;
   late List<String> selected;
+  late List<List<bool>> selectedCheckboxes;
 
   @override
   void initState() {
     super.initState();
     initializeLists();
+    initializeListSecond();
   }
 
   void initializeLists() {
@@ -23,6 +25,19 @@ class _TableExamplePageState extends State<TableExamplePage> {
     selected = List.generate(
       answersLength,
       (_) => '',
+    );
+  }
+
+  void initializeListSecond() {
+    final columnsLength = column.length;
+    final answersLength = row.length;
+
+    selectedCheckboxes = List.generate(
+      columnsLength,
+      (_) => List.generate(
+        answersLength,
+        (_) => false,
+      ),
     );
   }
 
@@ -61,6 +76,75 @@ class _TableExamplePageState extends State<TableExamplePage> {
                   ),
                 ),
                 const SizedBox(height: 28),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: CustomDataTable(
+                    color: const MaterialStatePropertyAll(
+                      Color(0xff1AC19D),
+                    ),
+                    columns: List.generate(
+                      column.length + 1,
+                      (columnIndex) {
+                        if (columnIndex == 0) {
+                          return const DataColumn(
+                            label: Text(
+                              '',
+                            ),
+                          );
+                        }
+                        return DataColumn(
+                          label: Text(
+                            column[columnIndex - 1],
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    dataTextStyle: const TextStyle(color: Colors.black),
+                    rows: List.generate(
+                      row.length,
+                      (rowIndex) => DataRow(
+                        color: const MaterialStatePropertyAll(
+                            Color(0xffEEF0F2)),
+                        cells: List.generate(
+                          column.length + 1,
+                          (index) {
+                            if (index == 0) {
+                              return DataCell(
+                                Text(
+                                  row[rowIndex],
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            }
+                            return DataCell(
+                              Radio(
+                                value: column[index - 1],
+                                groupValue: selected[rowIndex],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selected[rowIndex] = value.toString();
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    columnsHeight: 0,
+                    spaceBetweenColumns: 40,
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                /// Checkbox
+
                 SizedBox(
                   width: double.maxFinite,
                   child: CustomDataTable(
@@ -107,12 +191,12 @@ class _TableExamplePageState extends State<TableExamplePage> {
                               );
                             }
                             return DataCell(
-                              Radio(
-                                value: column[index - 1],
-                                groupValue: selected[rowIndex],
+                              Checkbox(
+                                value: selectedCheckboxes[index - 1][rowIndex],
                                 onChanged: (value) {
                                   setState(() {
-                                    selected[rowIndex] = value.toString();
+                                    selectedCheckboxes[index - 1][rowIndex] =
+                                        value!;
                                   });
                                 },
                               ),
@@ -132,11 +216,6 @@ class _TableExamplePageState extends State<TableExamplePage> {
       ),
     );
   }
-
-  MaterialStateProperty<Color?> getTableRowColor(int index) =>
-      MaterialStateProperty.all((index + 1).isOdd
-          ? Colors.grey.withOpacity(0.3)
-          : Colors.transparent);
 }
 
 List<String> column = [
@@ -145,10 +224,13 @@ List<String> column = [
   'Senior',
   'Lead',
   'Architect',
+  'Manager',
+  'Director',
+  'VP',
 ];
 
 List<String> row = [
-  'Sunnatilo',
-  'Mirsaid',
-  'Begzod',
+  'Mobile',
+  'Frontend',
+  'Backend',
 ];
